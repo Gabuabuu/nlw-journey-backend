@@ -1,15 +1,11 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
-import dayjs from "dayjs";
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import 'dayjs/locale/pt-br'
 import nodemailer from "nodemailer";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
+import { dayjs } from "../lib/dayjs";
 
-dayjs.locale('pt-br')
-dayjs.extend(localizedFormat)
 
 export async function createTrip(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -66,10 +62,10 @@ export async function createTrip(app: FastifyInstance) {
         },
       });
 
-      const fomartedStartDate = dayjs(starts_at).format('LL')
-      const fomartedEndDate = dayjs(ends_at).format('LL')
+      const fomartedStartDate = dayjs(starts_at).format("LL");
+      const fomartedEndDate = dayjs(ends_at).format("LL");
 
-      const confirmationLink = `http:/localhost:3333/trips/${trip.id}/confirm`
+      const confirmationLink = `http:/localhost:3333/trips/${trip.id}/confirm`;
 
       const mail = await getMailClient();
 
@@ -86,7 +82,7 @@ export async function createTrip(app: FastifyInstance) {
         html: `
         <div style="font-family: sans-serif; font-size: 16; line-height: 1.6;">
               <p>
-                Voce solicitou a criação de uma viagem para <strong>${destination}</strong>, Brasil. Nas datas
+                Voce solicitou a criação de uma viagem para <strong>${destination}</strong> nas datas
                 datas de <strong>${fomartedStartDate}</strong> até <strong>${fomartedEndDate}</strong>.
               </p>
 
